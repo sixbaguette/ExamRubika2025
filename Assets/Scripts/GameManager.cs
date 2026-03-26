@@ -1,11 +1,8 @@
-// Le fichier GameManager.cs - Une classe monolithique qui fait tout
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public ExplosionManager explosionManager;
-
     private int score;
     public int Score
     {
@@ -26,6 +23,13 @@ public class GameManager : MonoBehaviour
     private int bulletCount;
     private float nextSpawnTime;
     private float spawnRate;
+
+    private SpawnManager spawnManager;
+    private PlayerController playerController;
+    private UIManager uiManager;
+    private Bullet bullet;
+    private Enemy enemy;
+    private Asteroid asteroid;
 
     private TMPro.TMP_Text timeText;
     [SerializeField] private TMPro.TMP_Text countdownText;
@@ -66,6 +70,13 @@ public class GameManager : MonoBehaviour
 
         collisionSetup = FindAnyObjectByType<CollisionSetup>();
 
+        spawnManager = FindAnyObjectByType<SpawnManager>();
+        playerController = FindAnyObjectByType<PlayerController>();
+        uiManager = FindAnyObjectByType<UIManager>();
+        bullet = FindAnyObjectByType<Bullet>();
+        enemy = FindAnyObjectByType<Enemy>();
+        asteroid = FindAnyObjectByType<Asteroid>();
+
         // Ajouter le script de gestion de collision au joueur
         if (playerShip.GetComponent<PlayerController>() == null)
         {
@@ -96,18 +107,16 @@ public class GameManager : MonoBehaviour
             }
 
             // Gestion des entr�es du joueur
-            HandlePlayerInput();
-
-            // D�placement de tous les objets
-            MoveEnemies();
-            MoveAsteroids();
-            MoveBullets();
+            playerController.Move();
+            enemy.Move();
+            asteroid.Move();
+            bullet.Move();
 
             // G�n�ration de nouveaux ennemis/ast�ro�des
-            SpawnEnemiesAndAsteroids();
+            spawnManager.SpawnEnemiesAndAsteroids();
 
             // Mise � jour de l'UI
-            UpdateUI();
+            uiManager.UpdateUI();
         }
 
         // Gestion du d�compte de red�marrage

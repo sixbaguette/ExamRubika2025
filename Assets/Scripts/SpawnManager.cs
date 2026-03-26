@@ -51,7 +51,7 @@ public class SpawnManager : MonoBehaviour
         collisionSetup = FindAnyObjectByType<CollisionSetup>();
     }
 
-    void SpawnEnemiesAndAsteroids()
+    public void SpawnEnemiesAndAsteroids()
     {
         if (Time.time > nextSpawnTime)
         {

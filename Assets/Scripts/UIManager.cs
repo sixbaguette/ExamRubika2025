@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour
         yield return null;
     }
 
-    void UpdateUI()
+    public void UpdateUI()
     {
         // Mise � jour des textes de score et de vies
         if (scoreText != null)

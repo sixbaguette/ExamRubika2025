@@ -4,14 +4,24 @@ using UnityEngine;
 public class Bullet : MovingEntity
 {
     private ExplosionManager explosionManager;
-    private PlayerController explosionPrefab;
+    private GameObject explosionPrefab;
 
     private List<GameObject> enemies;
     private List<GameObject> bullets;
+    private SpawnManager spawnManager;
+
+    private int score;
 
     private void Start()
     {
+        explosionManager = FindAnyObjectByType<ExplosionManager>();
+        explosionPrefab = FindAnyObjectByType<PlayerController>().explosionPrefab;
 
+        enemies = FindAnyObjectByType<SpawnManager>().Enemies;
+        bullets = FindAnyObjectByType<WeaponSystem>().Bullets;
+        spawnManager = FindAnyObjectByType<SpawnManager>();
+
+        score = FindAnyObjectByType<GameManager>().Score;
     }
 
     public void HandleBulletEnemyCollision(GameObject bullet, GameObject enemy)
@@ -41,20 +51,42 @@ public class Bullet : MovingEntity
         if (collision.gameObject.CompareTag("Enemy"))
         {
             // Balle touche ennemi
-            gameManager.HandleBulletEnemyCollision(gameObject, collision.gameObject);
-            gameManager.score += 100;
+            HandleBulletEnemyCollision(gameObject, collision.gameObject);
+            score += 100;
 
             // Chance de générer un power-up
             if (Random.value < 0.5f)
             {
-                gameManager.SpawnPowerUp(collision.transform.position);
+                spawnManager.SpawnPowerUp(collision.transform.position);
             }
         }
         else if (collision.gameObject.CompareTag("Asteroid"))
         {
             // Balle touche astéroïde
-            gameManager.HandleBulletEnemyCollision(gameObject, collision.gameObject);
-            gameManager.score += 50;
+            HandleBulletEnemyCollision(gameObject, collision.gameObject);
+            score += 50;
+        }
+    }
+
+    public override void Move()
+    {
+        // Ajouter des forces au Rigidbody au lieu de d?placer la Transform
+        if (rb != null)
+        {
+            // R?initialiser la v?locit? et appliquer une nouvelle force
+            rb.linearVelocity = Vector3.forward * bulletSpeed;
+        }
+        else
+        {
+            // Fallback au mouvement par transform si pas de Rigidbody
+            transform.position += Vector3.forward * bulletSpeed * Time.deltaTime;
+        }
+
+        // Suppression des balles qui sortent de l'?cran
+        if (transform.position.z > 9) // Chang? de y ? z
+        {
+            Destroy(this);
+            //bullets.RemoveAt(i);
         }
     }
 }

@@ -20,7 +20,6 @@ public class PlayerController : MovingEntity
 
     private int lives;
 
-    private GameManager gameManager;
     private WeaponSystem weaponSystem;
     private WeaponPowerUp weaponPowerUp;
     private List<GameObject> powerUps;
@@ -41,7 +40,7 @@ public class PlayerController : MovingEntity
         asteroids = FindAnyObjectByType<SpawnManager>().Asteroids;
     }
 
-    void HandlePlayerInput()
+    public override void Move()
     {
         // D�placement du joueur
         float horizontalInput = Input.GetAxis("Horizontal");
