@@ -15,7 +15,7 @@ public class Bullet : MovingEntity
     private void Start()
     {
         explosionManager = FindAnyObjectByType<ExplosionManager>();
-        explosionPrefab = FindAnyObjectByType<PlayerController>().explosionPrefab;
+        explosionPrefab = FindAnyObjectByType<PlayerController>().ExplosionPrefab;
 
         enemies = FindAnyObjectByType<SpawnManager>().Enemies;
         bullets = FindAnyObjectByType<WeaponSystem>().Bullets;

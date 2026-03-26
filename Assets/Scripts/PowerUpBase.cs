@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PowerUpBase : MonoBehaviour
+public abstract class PowerUpBase : MonoBehaviour
 {
 
 }

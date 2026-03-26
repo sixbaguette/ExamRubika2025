@@ -3,15 +3,20 @@ using UnityEngine;
 
 public class PlayerController : MovingEntity
 {
-    public GameObject explosionPrefab;
+    [SerializeField] private GameObject explosionPrefab;
+    public GameObject ExplosionPrefab
+    {
+        get { return explosionPrefab; }
+        set { explosionPrefab = value; }
+    }
 
-    private GameObject playerShip;
+    [SerializeField] private GameObject playerShip;
     public GameObject PlayerShip
     {
         get { return playerShip; }
         set { playerShip = value; }
     }
-    private float playerSpeed = 5.0f;
+    [SerializeField] private float playerSpeed = 5.0f;
     public float PlayerSpeed
     {
         get { return playerSpeed; }

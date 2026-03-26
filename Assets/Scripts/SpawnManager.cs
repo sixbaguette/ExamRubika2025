@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    private GameObject powerUpPrefab;
-    private GameObject enemyPrefab;
-    private GameObject asteroidPrefab;
+    [SerializeField] private GameObject powerUpPrefab;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject asteroidPrefab;
 
     public float initialSpawnRate = 2.0f; // Taux de spawn initial
 
@@ -67,7 +67,7 @@ public class SpawnManager : MonoBehaviour
                 collisionSetup.SetupCollisionComponents(enemy, true, false, "Enemy");
 
                 // Ajouter le script de gestion de collision � l'ennemi
-                enemy.AddComponent<EnemyCollider>();
+                enemy.AddComponent<Enemy>();
 
                 enemies.Add(enemy);
             }
@@ -83,7 +83,7 @@ public class SpawnManager : MonoBehaviour
                 collisionSetup.SetupCollisionComponents(asteroid, true, false, "Asteroid");
 
                 // Ajouter le script de gestion de collision � l'ast�ro�de
-                asteroid.AddComponent<AsteroidCollider>();
+                asteroid.AddComponent<Asteroid>();
 
                 asteroids.Add(asteroid);
             }
@@ -100,7 +100,7 @@ public class SpawnManager : MonoBehaviour
         collisionSetup.SetupCollisionComponents(powerUp, true, false, "PowerUp");
 
         // Ajouter le script de gestion de collision au power-up
-        powerUp.AddComponent<PowerUpCollider>();
+        powerUp.AddComponent<WeaponPowerUp>();
 
         powerUps.Add(powerUp);
     }

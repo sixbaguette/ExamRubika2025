@@ -73,9 +73,6 @@ public class GameManager : MonoBehaviour
         spawnManager = FindAnyObjectByType<SpawnManager>();
         playerController = FindAnyObjectByType<PlayerController>();
         uiManager = FindAnyObjectByType<UIManager>();
-        bullet = FindAnyObjectByType<Bullet>();
-        enemy = FindAnyObjectByType<Enemy>();
-        asteroid = FindAnyObjectByType<Asteroid>();
 
         // Ajouter le script de gestion de collision au joueur
         if (playerShip.GetComponent<PlayerController>() == null)
@@ -106,14 +103,28 @@ public class GameManager : MonoBehaviour
                 timeText.text = string.Format("Time: {0:00}:{1:00}", minutes, seconds);
             }
 
+            spawnManager.SpawnEnemiesAndAsteroids();
+
             // Gestion des entr�es du joueur
             playerController.Move();
-            enemy.Move();
-            asteroid.Move();
-            bullet.Move();
 
-            // G�n�ration de nouveaux ennemis/ast�ro�des
-            spawnManager.SpawnEnemiesAndAsteroids();
+            bullet = FindAnyObjectByType<Bullet>(); // a rework
+            if (bullet != null)
+            {
+                bullet.Move();
+            }
+
+            asteroid = FindAnyObjectByType<Asteroid>(); // a rework
+            if (asteroids != null)
+            {
+                asteroid.Move();
+            }
+
+            enemy = FindFirstObjectByType<Enemy>(); // a rework
+            if (enemy != null)
+            {
+                enemy.Move();
+            }
 
             // Mise � jour de l'UI
             uiManager.UpdateUI();

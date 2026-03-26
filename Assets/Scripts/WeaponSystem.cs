@@ -5,7 +5,7 @@ public class WeaponSystem : MonoBehaviour
 {
     private GameObject playerShip;
 
-    private GameObject bulletPrefab;
+    [SerializeField] private GameObject bulletPrefab;
     public GameObject BulletPrefab
     {
         get { return bulletPrefab; }

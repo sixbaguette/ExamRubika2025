@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpaceObstacle : MovingEntity
+public abstract class SpaceObstacle : MovingEntity
 {
     private PlayerController playerController;
 
