@@ -1,0 +1,122 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MovingEntity
+{
+    public GameObject explosionPrefab;
+
+    private GameObject playerShip;
+    public GameObject PlayerShip
+    {
+        get { return playerShip; }
+        set { playerShip = value; }
+    }
+    private float playerSpeed = 5.0f;
+    public float PlayerSpeed
+    {
+        get { return playerSpeed; }
+        set { playerSpeed = value; }
+    }
+
+    private int lives;
+
+    private GameManager gameManager;
+    private WeaponSystem weaponSystem;
+    private WeaponPowerUp weaponPowerUp;
+    private List<GameObject> powerUps;
+
+    private List<GameObject> enemies;
+    private List<GameObject> asteroids;
+
+    private void Start()
+    {
+        lives = FindAnyObjectByType<GameManager>().Lives;
+
+        gameManager = FindAnyObjectByType<GameManager>();
+        weaponSystem = FindAnyObjectByType<WeaponSystem>();
+        weaponPowerUp = FindAnyObjectByType<WeaponPowerUp>();
+        powerUps = FindAnyObjectByType<SpawnManager>().PowerUps;
+
+        enemies = FindAnyObjectByType<SpawnManager>().Enemies;
+        asteroids = FindAnyObjectByType<SpawnManager>().Asteroids;
+    }
+
+    void HandlePlayerInput()
+    {
+        // D�placement du joueur
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        // D�placement sur le plan XZ
+        Vector3 movement = new Vector3(horizontalInput, 0, verticalInput) * playerSpeed * Time.deltaTime;
+        playerShip.transform.position += movement;
+
+        // Calcul des angles de rotation pour les deux axes
+        float tiltAngleZ = -horizontalInput * 30f; // Inclinaison lat�rale (gauche/droite)
+        float tiltAngleX = verticalInput * 15f;    // Inclinaison longitudinale (avant/arri�re)
+
+        // Cr�ation d'une rotation qui combine les deux inclinaisons
+        Quaternion targetRotation = Quaternion.Euler(tiltAngleX, 0, tiltAngleZ);
+
+        // Application de la rotation avec un lissage pour un effet plus naturel
+        playerShip.transform.rotation = Quaternion.Slerp(playerShip.transform.rotation, targetRotation, 5f * Time.deltaTime);
+
+        // Si aucun input, retour progressif � la rotation neutre
+        if (horizontalInput == 0 && verticalInput == 0)
+        {
+            playerShip.transform.rotation = Quaternion.Slerp(playerShip.transform.rotation, Quaternion.identity, 5f * Time.deltaTime);
+        }
+
+        // Limites de l'�cran pour le joueur
+        Vector3 playerPos = playerShip.transform.position;
+        playerPos.x = Mathf.Clamp(playerPos.x, -8.4f, 8.4f);
+        playerPos.z = Mathf.Clamp(playerPos.z, -11, -2.5f);
+        playerShip.transform.position = playerPos;
+
+        // Tir
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            weaponSystem.FireBullet();
+        }
+    }
+    public void HandlePlayerHit(GameObject hitObject)
+    {
+        // Destruction de l'objet qui a touch� le joueur
+        Instantiate(explosionPrefab, hitObject.transform.position, Quaternion.identity);
+
+        if (hitObject.CompareTag("Enemy"))
+        {
+            Destroy(hitObject);
+            enemies.Remove(hitObject);
+        }
+        else if (hitObject.CompareTag("Asteroid"))
+        {
+            Destroy(hitObject);
+            asteroids.Remove(hitObject);
+        }
+
+        // Perte d'une vie
+        lives--;
+
+        if (lives <= 0)
+        {
+            gameManager.GameOver();
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Asteroid"))
+        {
+            // Le joueur a été touché par un ennemi ou un astéroïde
+            HandlePlayerHit(collision.gameObject);
+        }
+        else if (collision.gameObject.CompareTag("PowerUp"))
+        {
+            // Le joueur a collecté un power-up
+            weaponPowerUp.ApplyPowerUp();
+            Destroy(collision.gameObject);
+            powerUps.Remove(collision.gameObject);
+        }
+    }
+}
