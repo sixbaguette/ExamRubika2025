@@ -26,7 +26,6 @@ public class PlayerController : MovingEntity
     private int lives;
 
     private WeaponSystem weaponSystem;
-    private WeaponPowerUp weaponPowerUp;
     private List<GameObject> powerUps;
 
     private List<GameObject> enemies;
@@ -34,11 +33,8 @@ public class PlayerController : MovingEntity
 
     private void Start()
     {
-        lives = FindAnyObjectByType<GameManager>().Lives;
-
         gameManager = FindAnyObjectByType<GameManager>();
         weaponSystem = FindAnyObjectByType<WeaponSystem>();
-        weaponPowerUp = FindAnyObjectByType<WeaponPowerUp>();
         powerUps = FindAnyObjectByType<SpawnManager>().PowerUps;
 
         enemies = FindAnyObjectByType<SpawnManager>().Enemies;
@@ -74,7 +70,7 @@ public class PlayerController : MovingEntity
         // Limites de l'�cran pour le joueur
         Vector3 playerPos = playerShip.transform.position;
         playerPos.x = Mathf.Clamp(playerPos.x, -8.4f, 8.4f);
-        playerPos.z = Mathf.Clamp(playerPos.z, -11, -2.5f);
+        playerPos.z = Mathf.Clamp(playerPos.z, -11, 0f);
         playerShip.transform.position = playerPos;
 
         // Tir
@@ -100,7 +96,8 @@ public class PlayerController : MovingEntity
         }
 
         // Perte d'une vie
-        lives--;
+        lives = FindAnyObjectByType<GameManager>().Lives--;
+        //lives--;
 
         if (lives <= 0)
         {
@@ -110,15 +107,11 @@ public class PlayerController : MovingEntity
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Asteroid"))
-        {
-            // Le joueur a été touché par un ennemi ou un astéroïde
-            HandlePlayerHit(collision.gameObject);
-        }
-        else if (collision.gameObject.CompareTag("PowerUp"))
+        if (collision.gameObject.CompareTag("PowerUp"))
         {
             // Le joueur a collecté un power-up
-            weaponPowerUp.ApplyPowerUp();
+            WeaponPowerUp weaponPowerUp = collision.gameObject.GetComponent<WeaponPowerUp>();
+            weaponPowerUp.ApplyPowerUp(); // a fix
             Destroy(collision.gameObject);
             powerUps.Remove(collision.gameObject);
         }

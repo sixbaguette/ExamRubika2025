@@ -20,7 +20,8 @@
         // Augmenter le nombre de projectiles pour tous les power-ups
         if (bulletCount < maxBulletCount)
         {
-            bulletCount++;
+            bulletCount = FindAnyObjectByType<WeaponSystem>().BulletCount++;
+            //bulletCount++;
 
             // Affichage d'un message temporaire pour informer le joueur
             StartCoroutine(uiManager.ShowPowerupMessage("Weapon Upgraded! Bullets: " + bulletCount));
@@ -28,7 +29,8 @@
         else
         {
             // Bonus de score si le joueur a d�j� le maximum de projectiles
-            score += 200;
+            score = FindAnyObjectByType<GameManager>().Score += 200;
+            //score += 200;
             StartCoroutine(uiManager.ShowPowerupMessage("Max Weapon Level! +200 Score"));
         }
     }

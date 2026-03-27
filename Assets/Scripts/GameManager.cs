@@ -3,13 +3,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     private int score;
     public int Score
     {
         get { return score; }
         set { score = value; }
     }
-    private int lives;
+
+    private int lives = 3;
     public int Lives
     {
         get { return lives; }
@@ -19,7 +22,7 @@ public class GameManager : MonoBehaviour
     private CollisionSetup collisionSetup;
     private GameObject playerShip;
     private GameObject gameOverPanel;
-    private int initialSpawnRate;
+    private float initialSpawnRate;
     private int bulletCount;
     private float nextSpawnTime;
     private float spawnRate;
@@ -27,9 +30,10 @@ public class GameManager : MonoBehaviour
     private SpawnManager spawnManager;
     private PlayerController playerController;
     private UIManager uiManager;
-    private Bullet bullet;
-    private Enemy enemy;
-    private Asteroid asteroid;
+    private WeaponSystem weaponSystem;
+    private Bullet[] bullet;
+    private Enemy[] enemy;
+    private Asteroid[] asteroid;
 
     private TMPro.TMP_Text timeText;
     [SerializeField] private TMPro.TMP_Text countdownText;
@@ -41,8 +45,8 @@ public class GameManager : MonoBehaviour
 
 
     [Header("Difficulty Settings")]
-    public float minSpawnRate = 0.5f; // Taux de spawn minimal (plus difficile)
-    public float spawnRateDifficulty = 0.1f; // R�duction du taux de spawn par minute
+    private float minSpawnRate = 0.5f; // Taux de spawn minimal (plus difficile)
+    private float spawnRateDifficulty = 0.1f; // R�duction du taux de spawn par minute
     private float gameTime = 0f; // Temps de jeu �coul�
 
     private bool isGameOver = false;
@@ -50,10 +54,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Initialisation
-        score = 0;
-        lives = 3;
-
         gameTime = 0f;
 
         playerShip = FindAnyObjectByType<PlayerController>().PlayerShip;
@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
 
         spawnRate = FindAnyObjectByType<SpawnManager>().SpawnRate;
         nextSpawnTime = FindAnyObjectByType<SpawnManager>().NextSpawnTime;
+        initialSpawnRate = FindAnyObjectByType<SpawnManager>().initialSpawnRate;
 
         bullets = FindAnyObjectByType<WeaponSystem>().Bullets;
         powerUps = FindAnyObjectByType<SpawnManager>().PowerUps;
@@ -93,7 +94,7 @@ public class GameManager : MonoBehaviour
 
             // Calcul du nouveau taux de spawn en fonction du temps �coul� (en minutes)
             float minutesPlayed = gameTime / 2f;
-            spawnRate = Mathf.Max(minSpawnRate, initialSpawnRate - (spawnRateDifficulty * minutesPlayed));
+            spawnRate = Mathf.Max(minSpawnRate, initialSpawnRate + (spawnRateDifficulty * minutesPlayed));
 
             // Affichage du temps de jeu (optionnel)
             if (timeText != null)
@@ -108,22 +109,31 @@ public class GameManager : MonoBehaviour
             // Gestion des entr�es du joueur
             playerController.Move();
 
-            bullet = FindAnyObjectByType<Bullet>(); // a rework
+            bullet = FindObjectsByType<Bullet>(FindObjectsSortMode.None);
             if (bullet != null)
             {
-                bullet.Move();
+                foreach (Bullet bullets in bullet)
+                {
+                    bullets.Move();
+                }
             }
 
-            asteroid = FindAnyObjectByType<Asteroid>(); // a rework
-            if (asteroids != null)
+            asteroid = FindObjectsByType<Asteroid>(FindObjectsSortMode.None);
+            if (asteroid != null)
             {
-                asteroid.Move();
+                foreach (Asteroid asteroids in asteroid)
+                {
+                    asteroids.Move();
+                }
             }
 
-            enemy = FindFirstObjectByType<Enemy>(); // a rework
+            enemy = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
             if (enemy != null)
             {
-                enemy.Move();
+                foreach (Enemy enemies in enemy)
+                {
+                    enemies.Move();
+                }
             }
 
             // Mise � jour de l'UI
@@ -211,9 +221,11 @@ public class GameManager : MonoBehaviour
         // R�initialisation des variables
         score = 0;
         lives = 3;
-        bulletCount = 1;
+        bulletCount = FindAnyObjectByType<WeaponSystem>().BulletCount = 1;
+        //bulletCount = 1;
         gameTime = 0f;
-        spawnRate = initialSpawnRate;
+        spawnRate = FindAnyObjectByType<SpawnManager>().SpawnRate = initialSpawnRate;
+        //spawnRate = initialSpawnRate;
         nextSpawnTime = Time.time + spawnRate;
 
         // Masquage du panel de game over

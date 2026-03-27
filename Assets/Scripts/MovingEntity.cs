@@ -34,4 +34,16 @@ public abstract class MovingEntity : MonoBehaviour, IMovable
     {
         rb = GetComponent<Rigidbody>();
     }
+
+    private void Update()
+    {
+        if (gameManager == null)
+        {
+            gameManager = FindAnyObjectByType<GameManager>();
+        }
+        else
+        {
+            return;
+        }
+    }
 }

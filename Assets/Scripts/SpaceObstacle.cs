@@ -10,7 +10,6 @@ public abstract class SpaceObstacle : MovingEntity
     private void Start()
     {
         playerController = FindAnyObjectByType<PlayerController>();
-        lives = FindAnyObjectByType<GameManager>().Lives;
         playerDamageEffect = FindAnyObjectByType<UIManager>().PlayerDamageEffect;
     }
 
@@ -28,8 +27,9 @@ public abstract class SpaceObstacle : MovingEntity
 
         if (transform.position.z < -12)
         {
+            lives = FindAnyObjectByType<GameManager>().Lives--;
             // Enlever un point de vie au joueur
-            lives--;
+            //lives--;
 
             // Effet visuel pour montrer que l'ast?ro?de a travers?
             if (playerDamageEffect != null)

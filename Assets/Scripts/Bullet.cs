@@ -52,7 +52,8 @@ public class Bullet : MovingEntity
         {
             // Balle touche ennemi
             HandleBulletEnemyCollision(gameObject, collision.gameObject);
-            score += 100;
+            score = FindAnyObjectByType<GameManager>().Score += 100;
+            //score += 100;
 
             // Chance de générer un power-up
             if (Random.value < 0.5f)
@@ -64,7 +65,8 @@ public class Bullet : MovingEntity
         {
             // Balle touche astéroïde
             HandleBulletEnemyCollision(gameObject, collision.gameObject);
-            score += 50;
+            score = FindAnyObjectByType<GameManager>().Score += 50;
+            //score += 50;
         }
     }
 
@@ -85,7 +87,7 @@ public class Bullet : MovingEntity
         // Suppression des balles qui sortent de l'?cran
         if (transform.position.z > 9) // Chang? de y ? z
         {
-            Destroy(this);
+            Destroy(this.gameObject);
             //bullets.RemoveAt(i);
         }
     }

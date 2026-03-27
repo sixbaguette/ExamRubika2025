@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
         {
             powerupMessageText.text = message;
             powerupMessageText.gameObject.SetActive(true);
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForSeconds(2f);
             powerupMessageText.gameObject.SetActive(false);
         }
         yield return null;
@@ -66,12 +66,13 @@ public class UIManager : MonoBehaviour
 
     public void UpdateUI()
     {
+        score = FindAnyObjectByType<GameManager>().Score;
         // Mise � jour des textes de score et de vies
         if (scoreText != null)
         {
             scoreText.text = "Score: " + score;
         }
-
+        lives = FindAnyObjectByType<GameManager>().Lives;
         if (livesText != null)
         {
             livesText.text = "Lives: " + lives;
