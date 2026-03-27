@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
     private int lives;
     private int score;
+    private float gameTime;
 
     [SerializeField] private TMPro.TMP_Text scoreText;
     public TMPro.TMP_Text ScoreText
@@ -50,6 +51,19 @@ public class UIManager : MonoBehaviour
         UpdateUI();
         if (gameOverPanel) gameOverPanel.SetActive(false);
         if (powerupMessageText) powerupMessageText.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        // Affichage du temps de jeu (optionnel)
+        gameTime += Time.deltaTime;
+
+        if (timeText != null)
+        {
+            int minutes = Mathf.FloorToInt(gameTime / 60);
+            int seconds = Mathf.FloorToInt(gameTime % 60);
+            timeText.text = string.Format("Time: {0:00}:{1:00}", minutes, seconds);
+        }
     }
 
     public IEnumerator ShowPowerupMessage(string message)

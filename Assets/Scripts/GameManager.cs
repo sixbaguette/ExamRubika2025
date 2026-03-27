@@ -35,7 +35,6 @@ public class GameManager : MonoBehaviour
     private Enemy[] enemy;
     private Asteroid[] asteroid;
 
-    private TMPro.TMP_Text timeText;
     [SerializeField] private TMPro.TMP_Text countdownText;
 
     private List<GameObject> enemies;
@@ -57,10 +56,8 @@ public class GameManager : MonoBehaviour
         gameTime = 0f;
 
         playerShip = FindAnyObjectByType<PlayerController>().PlayerShip;
-        timeText = FindAnyObjectByType<UIManager>().TimeText;
         gameOverPanel = FindAnyObjectByType<UIManager>().GameOverPanel;
 
-        spawnRate = FindAnyObjectByType<SpawnManager>().SpawnRate;
         nextSpawnTime = FindAnyObjectByType<SpawnManager>().NextSpawnTime;
         initialSpawnRate = FindAnyObjectByType<SpawnManager>().initialSpawnRate;
 
@@ -94,15 +91,7 @@ public class GameManager : MonoBehaviour
 
             // Calcul du nouveau taux de spawn en fonction du temps �coul� (en minutes)
             float minutesPlayed = gameTime / 2f;
-            spawnRate = Mathf.Max(minSpawnRate, initialSpawnRate + (spawnRateDifficulty * minutesPlayed));
-
-            // Affichage du temps de jeu (optionnel)
-            if (timeText != null)
-            {
-                int minutes = Mathf.FloorToInt(gameTime / 60);
-                int seconds = Mathf.FloorToInt(gameTime % 60);
-                timeText.text = string.Format("Time: {0:00}:{1:00}", minutes, seconds);
-            }
+            spawnRate = FindAnyObjectByType<SpawnManager>().SpawnRate = Mathf.Max(minSpawnRate, initialSpawnRate - (spawnRateDifficulty * minutesPlayed));
 
             spawnManager.SpawnEnemiesAndAsteroids();
 
