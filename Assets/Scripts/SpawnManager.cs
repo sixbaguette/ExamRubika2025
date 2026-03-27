@@ -4,6 +4,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject powerUpPrefab;
+    [SerializeField] private GameObject powerUpPrefab2;
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private GameObject asteroidPrefab;
 
@@ -94,14 +95,31 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnPowerUp(Vector3 position)
     {
-        GameObject powerUp = Instantiate(powerUpPrefab, position, Quaternion.identity);
+        int random = Random.Range(0, 2);
 
-        // Configuration des composants de collision pour le power-up
-        collisionSetup.SetupCollisionComponents(powerUp, true, false, "PowerUp");
+        if (random == 0)
+        {
+            GameObject powerUp = Instantiate(powerUpPrefab, position, Quaternion.identity);
 
-        // Ajouter le script de gestion de collision au power-up
-        powerUp.AddComponent<WeaponPowerUp>();
+            // Configuration des composants de collision pour le power-up
+            collisionSetup.SetupCollisionComponents(powerUp, true, false, "PowerUp");
 
-        powerUps.Add(powerUp);
+            // Ajouter le script de gestion de collision au power-up
+            powerUp.AddComponent<WeaponPowerUp>();
+
+            powerUps.Add(powerUp);
+        }
+        else if (random == 1)
+        {
+            GameObject powerUp = Instantiate(powerUpPrefab2, position, Quaternion.identity);
+
+            // Configuration des composants de collision pour le power-up
+            collisionSetup.SetupCollisionComponents(powerUp, true, false, "PowerUp");
+
+            // Ajouter le script de gestion de collision au power-up
+            powerUp.AddComponent<TurretPowerUp>();
+
+            powerUps.Add(powerUp);
+        }
     }
 }

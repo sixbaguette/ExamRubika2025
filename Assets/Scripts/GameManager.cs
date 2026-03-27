@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMPro.TMP_Text countdownText;
 
     private List<GameObject> enemies;
-    private List<GameObject> powerUps;
     private List<GameObject> asteroids;
+    private List<GameObject> powerUps;
     private List<GameObject> bullets;
 
 

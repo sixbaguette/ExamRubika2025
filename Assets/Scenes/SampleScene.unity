@@ -6341,6 +6341,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerUpPrefab: {fileID: 4375325453614173916, guid: 2db4f101870e79f4ebaafac9e416bfa7,
     type: 3}
+  powerUpPrefab2: {fileID: 4375325453614173916, guid: f34cd60cfdd45e6438c53551018d87f8,
+    type: 3}
   enemyPrefab: {fileID: 196105707552078345, guid: c26ead1fcdf028b43af4ef8c40323011,
     type: 3}
   asteroidPrefab: {fileID: 5176812263706246583, guid: 2fa9efb7ce3b9f844b2aaed34986be3c,
@@ -12010,6 +12012,7 @@ GameObject:
   - component: {fileID: 4111632860656950464}
   - component: {fileID: 4111632860656950463}
   - component: {fileID: 4111632860656950462}
+  - component: {fileID: 4111632860656950465}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -12124,6 +12127,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 5389837174213493555, guid: b783cfe89190393439df1653eff12aa8,
     type: 3}
+  bulletPrefab1: {fileID: 5389837174213493555, guid: 1a179bbdbfbcc7f4aaa77ea81691dedd,
+    type: 3}
+  fireRate: 3
 --- !u!114 &4111632860656950463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12152,6 +12158,33 @@ MonoBehaviour:
     type: 3}
   playerShip: {fileID: 663836049414597825}
   playerSpeed: 8
+--- !u!54 &4111632860656950465
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 663836049414597825}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

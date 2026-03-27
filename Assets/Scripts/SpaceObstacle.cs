@@ -40,8 +40,7 @@ public abstract class SpaceObstacle : MovingEntity
             // Destruction de l'ast?ro?de
             Destroy(this.gameObject);
 
-            // V?rifier si le joueur n'a plus de vies
-            if (lives <= 0)
+            if (lives <= 1)
             {
                 gameManager.GameOver();
             }

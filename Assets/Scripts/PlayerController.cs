@@ -76,7 +76,7 @@ public class PlayerController : MovingEntity
         // Tir
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            weaponSystem.FireBullet();
+            weaponSystem.FireBullet(Vector3.forward);
         }
     }
     public void HandlePlayerHit(GameObject hitObject)
@@ -99,7 +99,7 @@ public class PlayerController : MovingEntity
         lives = FindAnyObjectByType<GameManager>().Lives--;
         //lives--;
 
-        if (lives <= 0)
+        if (lives <= 1)
         {
             gameManager.GameOver();
         }
@@ -111,7 +111,9 @@ public class PlayerController : MovingEntity
         {
             // Le joueur a collecté un power-up
             WeaponPowerUp weaponPowerUp = collision.gameObject.GetComponent<WeaponPowerUp>();
-            weaponPowerUp.ApplyPowerUp(); // a fix
+            TurretPowerUp turretPowerUp = collision.gameObject.GetComponent<TurretPowerUp>();
+
+            weaponPowerUp.ApplyPowerUp();
             Destroy(collision.gameObject);
             powerUps.Remove(collision.gameObject);
         }

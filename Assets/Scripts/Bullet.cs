@@ -72,18 +72,6 @@ public class Bullet : MovingEntity
 
     public override void Move()
     {
-        // Ajouter des forces au Rigidbody au lieu de d?placer la Transform
-        if (rb != null)
-        {
-            // R?initialiser la v?locit? et appliquer une nouvelle force
-            rb.linearVelocity = Vector3.forward * bulletSpeed;
-        }
-        else
-        {
-            // Fallback au mouvement par transform si pas de Rigidbody
-            transform.position += Vector3.forward * bulletSpeed * Time.deltaTime;
-        }
-
         // Suppression des balles qui sortent de l'?cran
         if (transform.position.z > 9) // Chang? de y ? z
         {
